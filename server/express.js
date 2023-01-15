@@ -21,18 +21,14 @@ wsServer.broadcast = function broadcast(msg) {
 let count = 0
 wsServer.on('connection',async function connection(ws, req){
     ws.id =  uuid()
-    console.log("ws.id ", ws.id);
     const myCode = await codes.getByName(req.url.split("=")[1])
-    // console.log("my code ", myCode);
-    console.log("new client connected");
     ws.send(myCode?.code);
     if (count <2){
+        console.log(count);
         count++
     }
-    console.log("open ", count)
     ws.on('message', function incoming(messageAsBuffer){
         const message = messageAsBuffer.toString()
-        console.log(`received : ${message}`);
         wsServer.broadcast(message);
       
     }); 
@@ -40,7 +36,6 @@ wsServer.on('connection',async function connection(ws, req){
         if(count ===1 || count ===2){
             count = count-1
         }
-        console.log(count);
     } ) 
 });
 
