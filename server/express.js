@@ -12,6 +12,7 @@ const { uuid } = require('uuidv4');
 
 const codes = new DB("code")
 const wsServer = new webSocket.Server({ server:server, path: "/session"})
+// const wsServer = new webSocket.Server({ server:server, path: "/webSocket"})
 wsServer.broadcast = function broadcast(msg) {
     console.log(`broadcasting   ${msg}` );
     wsServer.clients.forEach(function each(client) {
@@ -19,9 +20,11 @@ wsServer.broadcast = function broadcast(msg) {
      });
  }
 let count = 0
+console.log("count => ", count)
 wsServer.on('connection',async function connection(ws, req){
     ws.id =  uuid()
     const myCode = await codes.getByName(req.url.split("=")[1])
+    console.log("myCode => ", myCode)
     ws.send(myCode?.code);
     if (count <2){
         console.log(count);
@@ -49,6 +52,7 @@ app.use(cors({
 }))
 
 app.get("/teacherOrStudent", (req, res)=>{
+    console.log("/teacherOrStudent ")
     res.status(200).send(`${count}`)
 })
 app.listen(APP_PORT, ()=>{

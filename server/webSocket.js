@@ -9,7 +9,7 @@ const app = express();
 //        socket.send('blabla') 
 //     })
 // })
-
+console.log("test io server")
 const io = require('socket.io')(express,{
     cors: { origin:"*" }
 });
